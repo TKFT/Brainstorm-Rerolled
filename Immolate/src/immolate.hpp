@@ -16,6 +16,7 @@ enum class customFilters {
     NEGATIVE_PERKEO,
 	NEGATIVE_PERKEO_BLUEPRINT,
     PERKEO_BASEBALL,
+    NEG_BLUE_NEG_BRAIN_NEG_PERKEO_TEMP,
 };
 
 inline std::string filterToString(customFilters f) {
@@ -30,6 +31,8 @@ inline std::string filterToString(customFilters f) {
 			return "N_Perk_Blueprint";
         case customFilters::PERKEO_BASEBALL:
 			return "Perkeo Baseball";
+           case customFilters::NEG_BLUE_NEG_BRAIN_NEG_PERKEO_TEMP:
+               return "Neg Blue Neg Brain Neg Perkeo Temp";
         default:
             return "Unknown Filter";
 	   }
@@ -42,6 +45,7 @@ inline customFilters stringToFilter(std::string i) {
 	if (i == "Negative Perkeo") return customFilters::NEGATIVE_PERKEO;
 	if (i == "N_Perk_Blueprint") return customFilters::NEGATIVE_PERKEO_BLUEPRINT;
 	if (i == "Perkeo Baseball") return customFilters::PERKEO_BASEBALL;
+    if (i == "Neg Blue Neg Brain Neg Perkeo Temp") return customFilters::NEG_BLUE_NEG_BRAIN_NEG_PERKEO_TEMP;
     return customFilters::NO_FILTER; // Default case
 }
 

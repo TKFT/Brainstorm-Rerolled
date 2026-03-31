@@ -26,6 +26,7 @@ local custom_filter_list = {
   ["Negative Perkeo"] = "Negative Perkeo",
   ["N_Perk_Blueprint"] = "N_Perk_Blueprint",
   ["Perkeo Baseball"] = "Perkeo Baseball",
+  ["Neg Blue Neg Brain Neg Perkeo Temp"] = "Neg Blue Neg Brain Neg Perkeo Temp",
 }
 
 local voucher_list = {
@@ -132,7 +133,8 @@ local custom_filter_keys = {
   "Negative Blueprint",
   "Negative Perkeo",
   "N_Perk_Blueprint",
-  "Perkeo Baseball"
+  "Perkeo Baseball",
+  "Neg Blue Neg Brain Neg Perkeo Temp",
 }
 local pack_keys = {
   "None",

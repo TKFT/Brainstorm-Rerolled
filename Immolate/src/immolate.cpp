@@ -227,6 +227,7 @@ long filter(Instance inst) {
             }
             return 0; // Return 0 if no negative blueprint is found 
         }
+
         case customFilters::NEGATIVE_PERKEO: {
 			bool negativePerkeo = false;
             if (inst.nextTag(1) != Item::Charm_Tag) {
@@ -328,11 +329,102 @@ long filter(Instance inst) {
             }
 			return 0; // Return 0 if no negative Baseball Card is found
         }
+
+        case customFilters::NEG_BLUE_NEG_BRAIN_NEG_PERKEO_TEMP: {
+            bool negativePerkeo = false;
+            if (inst.nextTag(1) != Item::Charm_Tag) {
+                return 0;
+            }
+            auto tarots = inst.nextArcanaPack(5, 1); //Mega Arcana Pack, assumed from a Charm Tag
+            for (int t = 0; t < 5; t++) {
+                if (tarots[t] == Item::The_Soul) {
+                    auto nextJoker = inst.nextJoker(ItemSource::Soul, 1, true);
+                    if (nextJoker.joker == Item::Perkeo && nextJoker.edition == Item::Negative) {
+                        negativePerkeo = true;
+                        break;
+                    }
+                    break;
+                }
+            }
+            if (!negativePerkeo) {
+                return 0; // If Perkeo is required but not found, return 0
+            }
+            bool negBrainstorm = false;
+            for (int j = 1; j < 2; j++) {
+                for (int i = 0; i < 2; i++) {
+                    ShopItem item = inst.nextShopItem(j);
+                    if (item.type == Item::Joker) {
+                        if (item.jokerData.joker == Item::Brainstorm && item.jokerData.edition == Item::Negative) {
+                            negBrainstorm = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (!negBrainstorm) {
+                return 0;
+            }
+            for (int j = 1; j < 2; j++) {
+                Pack pack = packInfo(inst.nextPack(j));
+                for (int i = 0; i < 2; i++) {
+                    if (pack.type == Item::Buffoon_Pack || pack.type == Item::Jumbo_Buffoon_Pack || pack.type == Item::Mega_Buffoon_Pack) {
+                        auto packContents = inst.nextBuffoonPack(pack.size, j);
+                        for (int x = 0; x < pack.size; x++) {
+                            if (packContents[x].joker == Item::Brainstorm && packContents[x].edition == Item::Negative) {
+                                negBrainstorm = true;
+                                break;
+                            }
+                        }
+                    }
+                    pack = packInfo(inst.nextPack(j));
+                }
+            }
+            if (!negBrainstorm) {
+                return 0;
+            }
+            bool bprint = false;
+            for (int j = 1; j < 2; j++) {
+                for (int i = 0; i < 2; i++) {
+                    ShopItem item = inst.nextShopItem(j);
+                    if (item.type == Item::Joker) {
+                        if (item.jokerData.joker == Item::Blueprint && item.jokerData.edition == Item::Negative) {
+                            bprint = true;
+                            break;
+                        }
+                    }
+                }
+                if (bprint) {
+                    return 1;
+                }
+            }
+            for (int j = 1; j < 2; j++) {
+                Pack pack2 = packInfo(inst.nextPack(j));
+                for (int p = 0; p <= 2; p++) {
+                    if (pack2.type == Item::Buffoon_Pack || pack2.type == Item::Jumbo_Buffoon_Pack || pack2.type == Item::Mega_Buffoon_Pack) {
+                        auto packContents = inst.nextBuffoonPack(pack2.size, j);
+                        for (int x = 0; x < pack2.size; x++) {
+                            if (packContents[x].joker == Item::Blueprint && packContents[x].edition == Item::Negative) {
+                                bprint = true;
+                                break;
+                            }
+                        }
+                    }
+                    pack2 = packInfo(inst.nextPack(j));
+                }
+            }
+            if (bprint) {
+                return 1; // Return a score of 1 if a negative blueprint is found
+            }
+
+            return 0; // Return 0 if no negative blueprint is found
+        }
         default:
             return 1;
     }
-    
+
 };
+
+
 
 std::string brainstorm_cpp(std::string seed, std::string voucher, std::string pack, std::string tag, double souls, bool observatory, bool perkeo, bool copymoney, bool retcon, bool bean, bool burglar, std::string customFilter) {
     BRAINSTORM_PACK = stringToItem(pack);
